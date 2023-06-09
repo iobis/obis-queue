@@ -1,20 +1,21 @@
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from datetime import datetime
 
 
+@dataclass
 class Task():
-     
-    def __init__(self, queue: str, priority: int, payload: dict, id: int = None):
-        self.id = id
-        self.queue = queue
-        self.priority = priority
-        self.payload = payload
-        self.created_at = None
-        self.client = None
-        self.locked_at = None
-        self.expires_at = None
-        self.release_at = None
-        self.completed_at = None
-        self.released_at = None
+    id: int = None
+    queue: str = None
+    priority: int = None
+    payload: dict = None
+    created_at: datetime = None
+    client: str = None
+    locked_at: datetime = None
+    expires_at: datetime = None
+    release_at: datetime = None
+    completed_at: datetime = None
+    released_at: datetime = None
 
 
 class Queue(ABC):
