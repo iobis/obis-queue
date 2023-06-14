@@ -4,4 +4,7 @@ __pycache__
 *.swp
 .env
 dev.py
-
+build
+dist
+*.egg-info
+scripts
