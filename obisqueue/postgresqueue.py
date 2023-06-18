@@ -4,6 +4,7 @@ import os
 from psycopg2.extras import DictCursor
 import json
 import logging
+from retry import retry
 
 
 logger = logging.getLogger(__name__)
@@ -88,6 +89,7 @@ class PostgresQueue(Queue):
         PostgresQueue.connection_pool.putconn(con)
         return task
 
+    @retry(tries=3, delay=60, backoff=2, logger=logger)
     def complete(self, task_id: int) -> None:
         con = PostgresQueue.connection_pool.getconn()
         cur = con.cursor()
