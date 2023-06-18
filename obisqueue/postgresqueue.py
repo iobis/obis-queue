@@ -21,7 +21,11 @@ class PostgresQueue(Queue):
                 dbname=os.getenv("DB_DB"),
                 user=os.getenv("DB_USER"),
                 password=os.getenv("DB_PASSWORD"),
-                host=os.getenv("DB_HOST")
+                host=os.getenv("DB_HOST"),
+                keepalives=1,
+                keepalives_idle=30,
+                keepalives_interval=10,
+                keepalives_count=5
             )
 
     def cleanup(self) -> None:
