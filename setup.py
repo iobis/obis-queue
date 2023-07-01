@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name="obisqueue",
-      version="0.3.0",
+      version="0.4.0",
       author="Pieter Provoost",
       author_email="pieterprovoost@gmail.com",
       license="MIT",

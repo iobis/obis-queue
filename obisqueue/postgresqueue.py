@@ -29,14 +29,14 @@ class PostgresQueue(Queue):
                 keepalives_count=5
             )
 
-    def cleanup(self) -> None:
+    def cleanup(self, queue: str="", minutes: int=0) -> None:
         con = PostgresQueue.connection_pool.getconn()
         cur = con.cursor()
         logger.debug("Deleting completed tasks")
         cur.execute("""
             delete from queue
-            where completed_at is not null
-        """)
+            where queue = %s and completed_at < now() - interval '%s minutes'
+        """, (queue, minutes))
         con.commit()
         cur.close()
         PostgresQueue.connection_pool.putconn(con)
