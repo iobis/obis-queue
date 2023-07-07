@@ -114,3 +114,25 @@ class PostgresQueue(Queue):
             logger.error(e)
         finally:
             con.close()
+
+    def find(self, queue: str | None = None) -> list[Task]:
+        tasks = list()
+        con = self.get_connection()
+        try:
+            with con:
+                with con.cursor(cursor_factory=DictCursor) as cur:
+                    if queue is not None:
+                        cur.execute(""" 
+                            select id, queue, priority, payload, locked_at from queue where queue = %s
+                        """, (queue,))
+                    else:
+                        cur.execute(""" 
+                            select id, queue, priority, payload, locked_at from queue
+                        """)
+                    rows = cur.fetchall()
+                    tasks = [Task(id=row["id"], queue=row["queue"], priority=row["priority"], payload=row["payload"], locked_at=row["locked_at"]) for row in rows]
+        except Exception as e:
+            logger.error(e)
+        finally:
+            con.close()
+        return tasks
